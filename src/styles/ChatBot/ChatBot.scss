@@ -6,7 +6,7 @@
     }
 
     &-Message {
-        background-color: #ccf;
+        background-color: rgb(217, 245, 250);
         border-radius: 10px;
         margin: 0 20px -10px;
         padding: 10px;
@@ -16,22 +16,22 @@
             padding: 0;
             list-style: none;
             li {
-                margin-bottom: 6px;
-                padding: 0;
+                margin-bottom: 6.5px;
                 list-style: none;
                 display: flex;
                 align-items: center;
-                padding: 6px;
-                background-color: #fff;
-                border-radius: 5px;
+                padding: 0px;
                 img {
                     max-width: 30px;
                     margin-right: 10px;
                     border-radius: 100%;
                 }
                 p {
+                    background-color: #fff;
                     margin: 0;
                     flex-grow: 1;
+                    padding: 6px;
+                    border-radius: 5px;
                 }
                 &.GuestImg {
                     img {
@@ -48,7 +48,7 @@
         text-align: right;
         img {
             cursor: pointer;
-            width: 60px;
+            width: 50px;
             margin: 20px;
         }
     }

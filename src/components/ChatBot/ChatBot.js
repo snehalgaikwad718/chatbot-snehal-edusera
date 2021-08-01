@@ -2,19 +2,24 @@ import React, { Component } from 'react'
 import ChatBotImg from "../../assests/chatbot.png"
 import GuestImg from "../../assests/guest.png"
 class ChatBot extends Component {
+    state={
+        Message:[
+            {
+                Text: "Hello, I'm a ChatBot!",
+                Bot: true
+            },
+            {
+                Text: "Hello, ChatBot",
+                Bot: false
+            }
+        ]
+    };
     render() {
         return (
             <div className="ChatBot-Wrapper">
                 <div className="ChatBot-Message">
                     <ul>
-                        {[{
-                            Text: "Hello, I'm a ChatBot!",
-                            Bot: true
-                        },
-                        {
-                            Text: "Hello, ChatBot",
-                            Bot: false
-                        }].map((msg, key) => (
+                        {this.state.Message.map((msg, key) => (
                             <li key={key} className={msg.Bot ? "ChatBotImg" : "GuestImg"}>
                                 <img 
                                 src={msg.Bot ? ChatBotImg : GuestImg} 
