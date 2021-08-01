@@ -42,6 +42,15 @@
                 }
             }
         }
+        form {
+            margin-top: 10px;
+            input {
+                border-radius: 5px;
+                padding: 6px;
+                display: block;
+                width: 100%;
+            }
+        }
     }
 
     &-Trigger {
