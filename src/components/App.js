@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
+import Header from './Bootstrap/Header'
 
 class App extends Component {
   render() {
     return (
-      <div classname="App">
-        
+      <div className="App">
+        <Header>ChatBot Without AI</Header>
       </div>
     )
   }
