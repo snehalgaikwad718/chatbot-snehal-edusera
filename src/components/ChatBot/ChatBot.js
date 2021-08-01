@@ -61,11 +61,6 @@ class ChatBot extends Component {
             fetch("https://api.github.com/users/" + LastMessage)
             .then(res => res.json())
             .then(GitHubUser => {
-                /*const PersonName = this.state.GitHubUser
-                ? this.state.GitHubUser.name
-                ? this.state.GitHubUser.name
-                : this.state.GitHubUser.login
-                : null;*/
 
                 const Text = `Hey ${
                     GitHubUser.name ? GitHubUser.name : GitHubUser.login
@@ -90,23 +85,224 @@ class ChatBot extends Component {
                     Bot: true
                 };
 
+                const Message = [
+                    ...this.state.Message,
+                    {
+                        Text,
+                        Bot: true
+                    },  
+                    {
+                        Text: (
+                            <>
+                                So what do you want to do now? Please enter one of the options
+                                here:
+                                <br />- help: Displays this message again.
+                                <br />- bio: Displays the GitHub Bio, if found.
+                                <br />- company: Displays the Company, if found.
+                                <br />- avatar: Displays the GitHub Avatar, if found.
+                                <br />- blog site: Displays the Blog Link, if found.
+                                <br />- location: Displays the Location, if found.
+                                <br />- can hire: Tells if the person can be hired.
+                                <br />- followers: Displays the number of followers of{" "}
+                                {GitHubUser.name}
+                                .
+                                <br />- following: Displays the number of people {GitHubUser.name}{" "}
+                                follows.
+                                <br />- reset: Back to Square one! 😉
+                            </>
+                        ),
+                        Bot: true
+                    }
+                ];
+
                 if (!GitHubUser.name) {
-                    this.state.Message.push(noName);
+                    Message.push(noName);
                 }
 
                 this.setState({
                     GitHubUser,
                     ChatBotState: 3,
-                    Message: [
-                        ...this.state.Message,
-                        {
-                            Text,
-                            Bot: true
-                        }
-                    ]
+                    Message
                 });
-            })
-        };
+            });
+
+        }
+        if (this.state.ChatBotState === 3) {
+            const PersonName = this.state.GitHubUser
+            ? this.state.GitHubUser.name
+            ? this.state.GitHubUser.name
+            : this.state.GitHubUser.login
+            : null;
+            // eslint-disable-next-line default-case
+            switch (LastMessage) {
+                case "help":
+                    this.setState({
+                        Message: [
+                            ...this.state.Message,
+                            {
+                                Text: (
+                                <>
+                                    So what do you want to do now? Please enter one of the options
+                                    here:
+                                    <br />- help: Displays this message again.
+                                    <br />- bio: Displays the GitHub Bio, if found.
+                                    <br />- company: Displays the Company, if found.
+                                    <br />- avatar: Displays the GitHub Avatar, if found.
+                                    <br />- blog site: Displays the Blog Link, if found.
+                                    <br />- location: Displays the Location, if found.
+                                    <br />- can hire: Tells if the person can be hired.
+                                    <br />- followers: Displays the number of followers of{" "}
+                                    {this.state.GitHubUser.name}
+                                    .
+                                    <br />- following: Displays the number of people {
+                                    this.state.GitHubUser.name
+                                    }{" "}
+                                    follows.
+                                    <br />- reset: Back to Square one! 😉
+                                </>
+                                ),
+                                Bot: true
+                            }
+                        ]
+                    });
+                break;   
+                
+                case "bio":
+                    this.setState({
+                        Message: [
+                            ...this.state.Message,
+                            {
+                                Text: this.state.GitHubUser.bio ? this.state.GitHubUser.bio : `${PersonName} hasn't updated their bio.`,
+                                Bot: true
+                            }
+                        ]
+                    });
+                break;
+
+                case "company":
+                    this.setState({
+                        Message: [
+                            ...this.state.Message,
+                            {
+                                Text: this.state.GitHubUser.company ? `${PersonName} works at ${this.state.GitHubUser.company}` : `${this.state.GitHubUser.name} hasn't updated their company.`,
+                                Bot: true
+                            }
+                        ]
+                    });
+                break;
+
+                case "avatar":
+                    this.setState({
+                        Message: [
+                            ...this.state.Message,
+                            {
+                                Text: (
+                                    <div className="avtar">
+                                        <img 
+                                        src={this.state.GitHubUser.avatar_url} 
+                                        alt={`${PersonName}'s Avatar`} 
+                                        />
+                                    </div>
+                                ),
+                                Bot: true
+                            }
+                        ]
+                    });
+                break;
+
+                case "website":
+                case "blog site":
+                    this.setState({
+                        Message: [
+                            ...this.state.Message,
+                            {
+                                Text: this.state.GitHubUser.blog ? ( 
+                                    <>
+                                        {PersonName} writes at{" "}
+                                        <a 
+                                        href = {this.state.GitHubUser.blog}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        > 
+                                        here 
+                                        </a>
+                                        ...
+                                    </>
+                                    ) 
+                                :( 
+                                    `${PersonName} hasn't got a blog or site.`
+                                    ),
+                                Bot: true
+                            }
+                        ]
+                    });
+                break;
+
+                case "location":
+                    this.setState({
+                        Message: [
+                            ...this.state.Message,
+                            {
+                                Text: this.state.GitHubUser.location ? `${PersonName} lives in ${this.state.GitHubUser.location}` : `${PersonName} hasn't mentioned their location.`,
+                                Bot: true
+                            }
+                        ]
+                    });
+                break;
+
+                case "hire":
+                case "can hire":
+                    this.setState({
+                        Message: [
+                            ...this.state.Message,
+                            {
+                                Text: `${PersonName} is ${this.state.GitHubUser.hireable ? " " : " not"} available for hire.`,
+                                Bot: true 
+                            }
+                        ]
+                    });
+                break;
+
+                case "followers":
+                    this.setState({
+                        Message:[
+                            ...this.state.Message,
+                            {
+                                Text: `${PersonName} has got ${this.state.GitHubUser.followers} followers.`,
+                                Bot: true
+                            }
+                        ]
+                    });
+                break;
+
+                case "followings":
+                    this.setState({
+                        Message:[
+                            ...this.state.Message,
+                            {
+                                Text: `${PersonName} follows ${this.state.GitHubUser.following} users.`
+                            }
+                        ]
+                    });
+                break;
+
+                case "reset":
+                default:
+                    this.setState({
+                        GitHubUser: null,
+                        ChatBotState: 0,
+                        Message: [
+                            ...this.state.Message,
+                            {
+                                Text: "Thanks for using our service. Please type start to begin once again...",
+                                Bot: true
+                            }
+                        ]
+                    });
+                break;
+
+            }
+        }
 
     };
 
