@@ -61,7 +61,50 @@ class ChatBot extends Component {
             fetch("https://api.github.com/users/" + LastMessage)
             .then(res => res.json())
             .then(GitHubUser => {
-                this.setState({ GitHubUser })
+                /*const PersonName = this.state.GitHubUser
+                ? this.state.GitHubUser.name
+                ? this.state.GitHubUser.name
+                : this.state.GitHubUser.login
+                : null;*/
+
+                const Text = `Hey ${
+                    GitHubUser.name ? GitHubUser.name : GitHubUser.login
+                }! I found you! You're awesome, coz you have got 
+                ${GitHubUser.public_repos} public repos! Saving your details`;
+
+                const noName = {
+                    Text: (
+                        <>
+                          Hey, {GitHubUser.login}, it seems like you haven't set your
+                          name. Would you like to please set one by going to {" "}
+                          <a 
+                          href="https://github.com/settings/profile"
+                          target="_blank"
+                          rel="noreferrer"
+                          >
+                              your profile settings
+                          </a>{" "}
+                          after you login?
+                        </>   
+                    ),
+                    Bot: true
+                };
+
+                if (!GitHubUser.name) {
+                    this.state.Message.push(noName);
+                }
+
+                this.setState({
+                    GitHubUser,
+                    ChatBotState: 3,
+                    Message: [
+                        ...this.state.Message,
+                        {
+                            Text,
+                            Bot: true
+                        }
+                    ]
+                });
             })
         };
 
