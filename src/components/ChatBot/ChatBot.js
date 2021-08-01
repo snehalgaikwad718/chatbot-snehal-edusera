@@ -5,16 +5,14 @@ class ChatBot extends Component {
     state={
         Open: false,
         GuestMsg: "",
+        ChatBotState: 0,
         Message:[
             {
-                Text: "Hello, I'm a ChatBot!",
+                Text: "Hey there! I am a ChatBot! Type start to begin...",
                 Bot: true
-            },
-            {
-                Text: "Hello, ChatBot",
-                Bot: false
             }
-        ]
+        ],
+        GitHubUser: null
     };
 
     toggleBox = () => {
@@ -26,7 +24,47 @@ class ChatBot extends Component {
     handleGuestMsgChange = e => {
         this.setState({
             GuestMsg: e.target.value
-        })
+        });
+    };
+
+    botAction = () => {
+        const LastMessage = [...this.state.Message].reverse()[0].Text;
+        if(LastMessage.toLowerCase() === "start") {
+            const Text = "Hey Guest, thanks for starting me up! Please enter your github username.";
+            this.setState({
+                ChatBotState: 1,
+                Message: [
+                    ...this.state.Message,
+                    {
+                        Text,
+                        Bot: true
+                    }
+                ]
+            });
+        };
+        if (this.state.ChatBotState === 1) {
+            const Text = `Thanks for providing ${LastMessage} as your GitHub username...`;
+            this.setState({
+                ChatBotState: 2,
+                Message: [
+                    ...this.state.Message,
+                    {
+                        Text,
+                        Bot: true
+                    },
+                    {
+                        Text: "Lets look it up with Github... Please Wait...",
+                        Bot: true
+                    }
+                ]
+            });
+            fetch("https://api.github.com/users/" + LastMessage)
+            .then(res => res.json())
+            .then(GitHubUser => {
+                this.setState({ GitHubUser })
+            })
+        };
+
     };
 
     handleGuestMsgSubmit = e => {
@@ -41,7 +79,9 @@ class ChatBot extends Component {
                     Bot: false
                 }
             ]
-        })
+        }, () => {
+            this.botAction();
+        });
     };
 
     render() {
