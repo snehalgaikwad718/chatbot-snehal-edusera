@@ -93,7 +93,10 @@ class ChatBot extends Component {
                         {this.state.Message.map((msg, key) => (
                             <li key={key} className={msg.Bot ? "ChatBotImg" : "GuestImg"}>
                                 <img 
-                                src={msg.Bot ? ChatBotImg : GuestImg} 
+                                src={msg.Bot ? ChatBotImg : 
+                                    this.state.GitHubUser 
+                                    ? this.state.GitHubUser.avatar_url 
+                                    : GuestImg} 
                                 alt={msg.Bot ? "ChatBotImg" : "GuestImg"} 
                                 />
                                 <p>{msg.Text}</p>
@@ -101,7 +104,15 @@ class ChatBot extends Component {
                         ))}
                     </ul>
                     <form className="ChatBot-Input" onSubmit={this.handleGuestMsgSubmit}>
-                        <input type="text" value={this.state.GuestMsg} onChange={this.handleGuestMsgChange} />
+                        <input type="text" 
+                        value={this.state.GuestMsg} 
+                        onChange={this.handleGuestMsgChange}
+                        placeholder={this.state.GitHubUser && 
+                            this.state.GitHubUser.name 
+                            ? `Please write something ${this.state.GitHubUser.name}...`
+                            : "Please start typing something..."
+                        } 
+                        />
                     </form>
                 </div>)}
                 
