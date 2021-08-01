@@ -3,6 +3,7 @@ import ChatBotImg from "../../assests/chatbot.png"
 import GuestImg from "../../assests/guest.png"
 class ChatBot extends Component {
     state={
+        Open: false,
         Message:[
             {
                 Text: "Hello, I'm a ChatBot!",
@@ -14,9 +15,16 @@ class ChatBot extends Component {
             }
         ]
     };
+
+    toggleBox = () => {
+        this.setState({
+            Open: !this.state.Open
+        })
+    };
     render() {
         return (
             <div className="ChatBot-Wrapper">
+                {this.state.Open && (
                 <div className="ChatBot-Message">
                     <ul>
                         {this.state.Message.map((msg, key) => (
@@ -29,10 +37,11 @@ class ChatBot extends Component {
                             </li>
                         ))}
                     </ul>
-                </div>
-                <form className="ChatBot-Input"></form>
+                    <form className="ChatBot-Input"></form>
+                </div>)}
+                
                 <div className="ChatBot-Trigger">
-                    <img src={ChatBotImg} alt="Open Chat" />
+                    <img src={ChatBotImg} alt="Open Chat" onClick={this.toggleBox} />
                 </div>
             </div>
         )
